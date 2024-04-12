@@ -1,0 +1,50 @@
+<?php
+
+class Venta {
+    private $numero;
+    private $fecha;
+    private $cliente;
+    private $motos = [];
+    private $precioFinal;
+    
+    public function __construct($numero, $fecha, $cliente) {
+        $this->numero = $numero;
+        $this->fecha = $fecha;
+        $this->cliente = $cliente;
+    }
+    
+    public function getNumero() {
+        return $this->numero;
+    }
+    
+    public function getFecha() {
+        return $this->fecha;
+    }
+    
+    public function getCliente() {
+        return $this->cliente;
+    }
+    
+    public function getMotos() {
+        return $this->motos;
+    }
+    
+    public function getPrecioFinal() {
+        return $this->precioFinal;
+    }
+    
+    public function incorporarMoto($objMoto) {
+        if ($objMoto->isActiva()) {
+            $this->motos[] = $objMoto;
+            $this->precioFinal += $objMoto->darPrecioVenta();
+        }
+    }
+    
+    public function __toString() {
+        $motosInfo = "";
+        foreach ($this->motos as $moto) {
+            $motosInfo .= $moto . "\n";
+        }
+        return "Venta No. {$this->numero}, Fecha: {$this->fecha}, Cliente: {$this->cliente}, Motos:\n{$motosInfo}, Precio Final: {$this->precioFinal}";
+    }
+}

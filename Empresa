@@ -1,0 +1,87 @@
+<?php
+
+class Empresa {
+    private $denominacion;
+    private $direccion;
+    private $clientes = [];
+    private $motos = [];
+    private $ventas = [];
+    
+    public function __construct($denominacion, $direccion) {
+        $this->denominacion = $denominacion;
+        $this->direccion = $direccion;
+    }
+    
+    public function getDenominacion() {
+        return $this->denominacion;
+    }
+    
+    public function getDireccion() {
+        return $this->direccion;
+    }
+    
+    public function agregarCliente($cliente) {
+        $this->clientes[] = $cliente;
+    }
+    
+    public function agregarMoto($moto) {
+        $this->motos[] = $moto;
+    }
+    
+    public function agregarVenta($venta) {
+        $this->ventas[] = $venta;
+    }
+
+    public function registrarVenta($colCodigosMotos, $objCliente) {
+        $venta = new Venta(count($this->ventas) + 1, date('Y-m-d'), $objCliente);
+        foreach ($colCodigosMotos as $codigoMoto) {
+            $moto = $this->retornarMoto($codigoMoto);
+            if ($moto !== null && $moto->getActiva()) {
+                $venta->incorporarMoto($moto);
+            }
+        }
+        if (count($venta->getMotos()) > 0) {
+            $this->agregarVenta($venta);
+            return $venta->getPrecioFinal();
+        } else {
+            return 0;
+        }
+    }
+    public function retornarMoto($codigoMoto) {
+        foreach ($this->motos as $moto) {
+            if ($moto->getCodigo() == $codigoMoto && $moto->isActiva()) {
+                return $moto;
+            }
+        }
+        return null;
+    }
+    
+    public function retornarVentasXCliente($tipo, $numDoc) {
+        $ventasCliente = [];
+        foreach ($this->ventas as $venta) {
+            if ($venta->getCliente()->getTipoDocumento() == $tipo && $venta->getCliente()->getNumeroDocumento() == $numDoc) {
+                $ventasCliente[] = $venta;
+            }
+        }
+        return $ventasCliente;
+    }
+    
+    public function __toString() {
+        $clientesInfo = "";
+        foreach ($this->clientes as $cliente) {
+            $clientesInfo .= $cliente . "\n";
+        }
+        
+        $motosInfo = "";
+        foreach ($this->motos as $moto) {
+            $motosInfo .= $moto . "\n";
+        }
+        
+        $ventasInfo = "";
+        foreach ($this->ventas as $venta) {
+            $ventasInfo .= $venta . "\n";
+        }
+        
+        return "Empresa: {$this->denominacion}, Dirección: {$this->direccion}\nClientes:\n{$clientesInfo}\nMotos:\n{$motosInfo}\nVentas:\n{$ventasInfo}";
+    }
+}

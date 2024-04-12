@@ -1,0 +1,59 @@
+<?php
+// Incluir las clases
+require_once 'Cliente';
+require_once 'Moto';
+require_once 'Venta';
+require_once 'Empresa';
+
+
+$objCliente1 = new Cliente("Juan", "Perez", false, "DNI", "12345678");
+$objCliente2 = new Cliente("Maria", "Gomez", true, "CI", "9876543");
+
+
+$obMoto1 = new Moto(11, 2230000, 2022, "Benelli Imperiale 400", 0.85, true);
+$obMoto2 = new Moto(12, 584000, 2021, "Zanella Zr 150 Ohc", 0.70, true);
+$obMoto3 = new Moto(13, 999900, 2023, "Zanella Patagonian Eagle 250", 0.55, false);
+
+
+$empresa = new Empresa("Alta Gama", "Av Argenetina 123");
+$empresa->agregarMoto($obMoto1);
+$empresa->agregarMoto($obMoto2);
+$empresa->agregarMoto($obMoto3);
+$empresa->agregarCliente($objCliente1);
+$empresa->agregarCliente($objCliente2);
+
+
+echo "Resultado de registrarVenta 1:\n";
+$totalVenta1 = $empresa->registrarVenta([11], $objCliente2);
+echo "Total de la venta: $totalVenta1\n\n";
+
+
+echo "Resultado de registrarVenta 2:\n";
+$totalVenta2 = $empresa->registrarVenta([12], $objCliente2);
+echo "Total de la venta: $totalVenta2\n\n";
+
+
+echo "Resultado de registrarVenta 3:\n";
+$totalVenta3 = $empresa->registrarVenta([13], $objCliente2);
+echo "Total de la venta: $totalVenta3\n\n";
+
+
+echo "Ventas de Cliente 1:\n";
+$ventasCliente1 = $empresa->retornarVentasXCliente("DNI", "12345678");
+foreach ($ventasCliente1 as $venta) {
+    echo $venta . "\n";
+}
+echo "\n";
+
+
+echo "Ventas de Cliente 2:\n";
+$ventasCliente2 = $empresa->retornarVentasXCliente("CI", "9876543");
+foreach ($ventasCliente2 as $venta) {
+    echo $venta . "\n";
+}
+echo "\n";
+
+
+echo "Información de la empresa:\n";
+echo $empresa;
+?>
